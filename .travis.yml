@@ -1,5 +1,8 @@
 sudo: required
 language: java
+arch: 
+  - arm64
+  - amd64
 jdk:
   - openjdk8
 
