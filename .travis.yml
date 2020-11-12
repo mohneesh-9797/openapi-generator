@@ -97,13 +97,13 @@ before_install:
   #- sudo apt-get install dart
   # switch to php7
   - if [ "${TRAVIS_CPU_ARCH}" == "arm64" ]; then
-      phpenv versions 
-      phpenv global 7.2.31
-      php -v
+      phpenv versions; 
+      phpenv global 7.2.31;
+      php -v;
     else
-      phpenv versions
-      phpenv global 7.2.15
-      php -v
+      phpenv versions;
+      phpenv global 7.2.15;
+      php -v;
     fi
   # comment out below as installation failed in travis
   # Add rebar3 build tool and recent Erlang/OTP for Erlang petstore server tests.
