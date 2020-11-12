@@ -96,9 +96,15 @@ before_install:
   #- sudo apt-get update
   #- sudo apt-get install dart
   # switch to php7
-  - phpenv versions
-  - phpenv global 7.2.31
-  - php -v
+  - if [ "${TRAVIS_CPU_ARCH}" == "arm64" ]; then
+      phpenv versions 
+      phpenv global 7.2.31
+      php -v
+    else
+      phpenv versions
+      phpenv global 7.2.15
+      php -v
+    fi
   # comment out below as installation failed in travis
   # Add rebar3 build tool and recent Erlang/OTP for Erlang petstore server tests.
   # - Travis CI does not support rebar3 [yet](https://github.com/travis-ci/travis-ci/issues/6506#issuecomment-275189490).
@@ -126,8 +132,18 @@ before_install:
     fi;
   - pushd .; cd website; yarn install; popd
   # install Deno
-  - curl -fsSL https://deno.land/x/install/install.sh | sh -s v1.1.2
-  - export PATH="$HOME/.deno/bin:$PATH"
+  - if [ "${TRAVIS_CPU_ARCH}" == "arm64" ]; then
+      git clone https://github.com/denoland/deno/;
+      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y -v;
+      sudo apt install libglib2.0-dev;
+      export PATH=$PATH:$HOME/.cargo/bin;
+      cd deno;
+      cargo build -vv;
+      cd ..;
+    else
+      curl -fsSL https://deno.land/x/install/install.sh | sh -s v1.1.2;
+      export PATH="$HOME/.deno/bin:$PATH";
+    fi
 
 install:
   # Add Godeps dependencies to GOPATH and PATH
